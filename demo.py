@@ -81,11 +81,20 @@ class AutoAIDemo:
     """Interactive demo of the AutoAI typing assistant."""
 
     def __init__(self):
-        # Initialize components
+        # Initialize components with a status message
+        print(f"  {colored('⚙', Colors.CYAN)} Loading system components and dictionary...")
+        
         self.dictionary = Dictionary()
+        dict_path = os.path.join('data', 'dictionaries', 'english.txt')
+        if os.path.exists(dict_path):
+            self.dictionary.load_from_file(dict_path)
+            # Add some common abbreviations that might be missing or useful
+            for word in ['r', 'u', 'ur', 'ok', 'idk', 'omw', 'brb', 'lol', 'thx']:
+                self.dictionary.add_word(word, 100)
+        
         self.corrector = AutoCorrector(dictionary=self.dictionary, max_edit_distance=2)
         self.predictor = WordPredictor(n=3)
-        self.learner = UserLearner(UserProfile(user_id="demo_user"))
+        self.learner = UserLearner(UserProfile(user_id="demo_user"), dictionary=self.dictionary)
 
         # Train with some initial corpus
         self._train_initial_corpus()

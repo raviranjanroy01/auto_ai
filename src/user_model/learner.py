@@ -12,14 +12,16 @@ from prediction import NGramModel
 class UserLearner:
     """Learns from user input to personalize the typing experience."""
 
-    def __init__(self, profile: UserProfile = None):
+    def __init__(self, profile: UserProfile = None, dictionary: "Dictionary" = None):
         """
         Initialize the UserLearner.
 
         Args:
             profile: A UserProfile instance. Creates a default one if None.
+            dictionary: A Dictionary instance to update with new words.
         """
         self.profile = profile or UserProfile()
+        self.dictionary = dictionary
         self.personal_model = NGramModel(n=3)
 
     def learn_from_text(self, text: str):
@@ -34,6 +36,8 @@ class UserLearner:
         # Record individual words
         for word in words:
             self.profile.add_word(word)
+            if self.dictionary:
+                self.dictionary.add_word(word, 1)
 
         # Record word pairs
         for i in range(len(words) - 1):
