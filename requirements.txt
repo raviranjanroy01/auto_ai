@@ -15,3 +15,8 @@ pyyaml>=6.0.1
 # Future: ML/Deep Learning (Phase 2)
 # torch>=2.0.0
 # transformers>=4.35.0
+
+# Desktop UI & Interaction (Phase 1)
+customtkinter>=5.2.1
+pynput>=1.7.6
+pyperclip>=1.8.2

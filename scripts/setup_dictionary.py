@@ -2,8 +2,10 @@ import nltk
 import os
 
 def download_dictionary():
-    print("Downloading NLTK words corpus...")
+    print("Downloading NLTK words and punkt corpus...")
     nltk.download('words')
+    nltk.download('punkt')
+    nltk.download('punkt_tab')
     
     from nltk.corpus import words
     word_list = words.words()
