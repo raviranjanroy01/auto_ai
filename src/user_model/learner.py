@@ -6,7 +6,7 @@ personal vocabulary, and improve prediction accuracy.
 """
 
 from .profile import UserProfile
-from ..prediction import NGramModel
+from prediction import NGramModel
 
 
 class UserLearner:
