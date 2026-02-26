@@ -76,9 +76,14 @@ class Dictionary:
             raise FileNotFoundError(f"Dictionary file not found: {filepath}")
 
         with open(filepath, "r", encoding="utf-8") as f:
-            words = f.read().split()
-            word_counts = Counter(words)
-            self._words.update(word_counts)
+            for line in f:
+                parts = line.strip().split()
+                if len(parts) == 2:
+                    word, freq = parts[0], int(parts[1])
+                    self._words[word] = freq
+                elif len(parts) == 1:
+                    # Fallback for old single-word format
+                    self._words[parts[0]] = self._words.get(parts[0], 0) + 1
 
     def save_to_file(self, filepath: str):
         """
