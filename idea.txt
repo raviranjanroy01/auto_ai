@@ -1,0 +1,15 @@
+i want to build an ai system : a typing assist system
+
+basefeatures:
+1. to auto correct the typed text
+2. to pridict the next word
+
+platform : both for phone and desktop
+
+working:
+1. we will take a model 
+2. log the user data for next word prediction or self correct.
+3. costumizable model to costumize the model behaviour based on user
+
+this is my basic idea just a thaught and i know it could be improved further. for now its just a rough picture about the idea.
+tell me your openions.
