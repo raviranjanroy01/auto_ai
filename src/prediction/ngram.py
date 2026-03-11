@@ -80,6 +80,46 @@ class NGramModel:
 
         return []
 
+    def predict_with_prefix(self, context: str, prefix: str, top_k: int = 10) -> list:
+        """
+        Predict the next word given context, filtered to words starting with prefix.
+        This is more efficient than predict() + filter because it scans all matching
+        words at each n-gram order.
+
+        Args:
+            context: The preceding text (completed words).
+            prefix: Only return words starting with this prefix.
+            top_k: Number of results.
+
+        Returns:
+            List of (word, probability) tuples.
+        """
+        if not prefix:
+            return self.predict(context, top_k)
+
+        tokens = context.lower().split()
+        prefix_lower = prefix.lower()
+
+        for order in range(min(self.n, len(tokens) + 1), 0, -1):
+            if order == 1:
+                ctx = ()
+            else:
+                ctx = tuple(tokens[-(order - 1):])
+
+            if ctx in self.ngram_counts and self.context_totals[ctx] > 0:
+                total = self.context_totals[ctx]
+                matches = [
+                    (word, count / total)
+                    for word, count in self.ngram_counts[ctx].items()
+                    if word.startswith(prefix_lower) and word != prefix_lower
+                ]
+                matches.sort(key=lambda x: x[1], reverse=True)
+                if matches:
+                    return matches[:top_k]
+                # If no matches at this order, fall through to lower order
+
+        return []
+
     def probability(self, word: str, context: str) -> float:
         """
         Get the probability of a word given context.

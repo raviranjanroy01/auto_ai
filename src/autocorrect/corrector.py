@@ -13,26 +13,22 @@ from .dictionary import Dictionary
 class AutoCorrector:
     """Main auto-correction engine."""
 
-    def __init__(self, dictionary: Dictionary = None, max_edit_distance: int = 2):
+    def __init__(self, dictionary: Dictionary = None, max_edit_distance: int = 2, ngram_model=None):
         """
         Initialize the AutoCorrector.
 
         Args:
             dictionary: A Dictionary instance for word lookup.
             max_edit_distance: Maximum edit distance to consider for corrections.
+            ngram_model: Optional NGramModel for context-aware scoring.
         """
         self.dictionary = dictionary or Dictionary()
         self.max_edit_distance = max_edit_distance
+        self.ngram_model = ngram_model
 
-    def correct(self, word: str) -> str:
+    def correct(self, word: str, context: str = "") -> str:
         """
-        Correct a single word.
-
-        Args:
-            word: The word to correct.
-
-        Returns:
-            The corrected word, or the original word if no correction is needed.
+        Correct a single word, optionally using context for better accuracy.
         """
         if not word:
             return ""
@@ -49,20 +45,39 @@ class AutoCorrector:
         if not candidates:
             return word
 
-        # Return the candidate with the smallest edit distance,
-        # breaking ties by word frequency
-        best = min(
-            candidates,
-            key=lambda c: (c[1], -self.dictionary.get_frequency(c[0]))
-        )
+        # Scoring Logic:
+        # We combine three factors:
+        # 1. Edit Distance (lower is better)
+        # 2. Dictionary Frequency (higher is better)
+        # 3. Contextual Fit (higher is better, if model exists)
         
-        # Preserve original casing if possible
-        corrected = best[0]
+        best_word = word
+        max_score = -float('inf')
+
+        for cand, dist in candidates:
+            # Base score from frequency
+            freq = self.dictionary.get_frequency(cand)
+            score = 0.1 * (freq / (dist + 1)) # Simple heuristic
+            
+            # Contextual score (The G-Board Secret Sauce)
+            if self.ngram_model and context:
+                prob = self.ngram_model.probability(cand, context)
+                score += prob * 1000 # Give context heavy weight
+
+            # Bonus for edit distance 1 over 2
+            if dist == 1:
+                score *= 2
+
+            if score > max_score:
+                max_score = score
+                best_word = cand
+
+        # Preserve original casing
         if word.isupper():
-            return corrected.upper()
+            return best_word.upper()
         if word[0].isupper():
-            return corrected.capitalize()
-        return corrected
+            return best_word.capitalize()
+        return best_word
 
     def get_candidates(self, word: str) -> list:
         """

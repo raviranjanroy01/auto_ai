@@ -1,0 +1,63 @@
+# Desktop G-Board — Default Configuration
+# ==========================================
+# Copy this file to the project root as 'config.yaml' and customize.
+
+general:
+  app_name: "Desktop G-Board"
+  version: "0.2.0"
+  log_level: "INFO"
+  # "native" = C++ hook service (best performance, requires build)
+  # "fallback" = pynput (no build needed, slightly higher latency)
+  hook_mode: "fallback"
+
+autocorrect:
+  enabled: true
+  max_edit_distance: 2
+  min_word_length: 2
+
+prediction:
+  enabled: true
+  ngram_order: 3
+  top_k: 5
+
+inference:
+  offline_only: false
+  local:
+    # Path to a quantized .gguf model (e.g., TinyLlama-1B)
+    # Leave empty to use n-gram only
+    llm_model_path: ""
+    onnx_model_path: ""
+  cloud:
+    primary_provider: "groq"
+    # Set API keys here or via environment variables:
+    #   GROQ_API_KEY, GEMINI_API_KEY, OPENAI_API_KEY, ANTHROPIC_API_KEY
+    groq_api_key: ""
+    gemini_api_key: ""
+    openai_api_key: ""
+    anthropic_api_key: ""
+    groq_model: "llama-3.3-70b-versatile"
+    gemini_model: "gemini-2.0-flash"
+    openai_model: "gpt-4o-mini"
+    anthropic_model: "claude-sonnet-4-20250514"
+
+context:
+  max_context_length: 2048
+  max_global_context: 4096
+  max_tracked_windows: 32
+
+ui:
+  overlay_enabled: true
+  overlay_opacity: 0.95
+  overlay_width: 280
+  follow_caret: true
+  caret_poll_interval_ms: 50
+
+user_model:
+  learning_enabled: true
+  save_interval: 300
+  data_directory: "data/user_data"
+
+hotkeys:
+  code_assist: "ctrl+j"
+  elaborate: "ctrl+e"
+  dismiss: "escape"

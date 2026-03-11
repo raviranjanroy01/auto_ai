@@ -1,22 +1,39 @@
-# Core dependencies
+# ═══════════════════════════════════════════════════════════
+#  Desktop G-Board — Dependencies
+# ═══════════════════════════════════════════════════════════
+
+# ─── Core ────────────────────────────────────────────────────
 nltk>=3.8.1
 numpy>=1.24.0
-
-# Text processing
 regex>=2023.12.25
-
-# Testing
-pytest>=7.4.0
-pytest-cov>=4.1.0
-
-# Configuration
 pyyaml>=6.0.1
 
-# Future: ML/Deep Learning (Phase 2)
-# torch>=2.0.0
-# transformers>=4.35.0
+# ─── Keyboard & Input ───────────────────────────────────────
+pynput>=1.7.6               # Fallback keyboard hook (pure Python)
+pyperclip>=1.8.2             # Clipboard integration
 
-# Desktop UI & Interaction (Phase 1)
-customtkinter>=5.2.1
-pynput>=1.7.6
-pyperclip>=1.8.2
+# ─── UI: Overlay & System Tray ──────────────────────────────
+PySide6>=6.5.0               # Hardware-accelerated transparent overlay (recommended)
+# customtkinter>=5.2.1       # Legacy UI (use --legacy flag)
+pystray>=0.19.4              # System tray icon
+Pillow>=10.0.0               # Icon generation for tray
+
+# ─── Process Detection ──────────────────────────────────────
+psutil>=5.9.0                # Process name detection (optional, has Win32 fallback)
+
+# ─── Cloud Inference ────────────────────────────────────────
+groq>=1.0.0                  # Groq Cloud API (FREE — default, Llama 3.3 70B)
+google-genai>=1.0.0          # Google Gemini API (FREE tier)
+# openai>=1.12.0             # OpenAI GPT-4 SDK (paid)
+# anthropic>=0.25.0          # Anthropic Claude SDK (paid)
+
+# ─── Local Inference (optional — Phase 2) ───────────────────
+# llama-cpp-python>=0.2.0    # Local LLM via llama.cpp
+# onnxruntime>=1.17.0        # ONNX model inference
+
+# ─── UI Automation (optional, for Chrome/VS Code caret tracking)
+# comtypes>=1.4.0            # Microsoft UI Automation COM interface
+
+# ─── Testing ────────────────────────────────────────────────
+pytest>=7.4.0
+pytest-cov>=4.1.0

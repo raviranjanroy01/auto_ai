@@ -100,5 +100,27 @@ class Dictionary:
     def __len__(self):
         return len(self._words)
 
+    def search_prefix(self, prefix: str, top_k: int = 10) -> list:
+        """
+        Find words that start with the given prefix, ranked by frequency.
+
+        Args:
+            prefix: The prefix to match (e.g., "hel" -> "hello", "help").
+            top_k: Maximum number of results.
+
+        Returns:
+            List of (word, frequency) tuples sorted by frequency descending.
+        """
+        if not prefix:
+            return []
+        prefix_lower = prefix.lower()
+        matches = [
+            (word, freq)
+            for word, freq in self._words.items()
+            if word.startswith(prefix_lower) and word != prefix_lower
+        ]
+        matches.sort(key=lambda x: x[1], reverse=True)
+        return matches[:top_k]
+
     def __repr__(self):
         return f"Dictionary(size={len(self)})"

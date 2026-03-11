@@ -1,0 +1,63 @@
+═══════════════════════════════════════════════════════════
+  Desktop G-Board — Essential Commands
+═══════════════════════════════════════════════════════════
+
+─── Setup ─────────────────────────────────────────────────
+
+python -m venv venv                       # Create virtual environment
+venv\Scripts\activate                     # Activate virtual environment (Windows)
+pip install -r requirements.txt           # Install all dependencies
+python scripts/setup_dictionary.py        # Download NLTK corpus & build n-gram model
+
+─── Launch ────────────────────────────────────────────────
+
+python main.py                            # Full launch (system tray + overlay)
+python main.py --console                  # Console mode (no tray, logs to terminal)
+python main.py --console --offline        # Offline mode (no cloud API calls)
+python main.py --hook native              # Use C++ hook (requires build, better perf)
+python main.py --hook fallback            # Use pynput hook (default, no build needed)
+python main.py --config myconfig.yaml     # Use custom config file
+start_gboard.bat                          # Quick-start launcher (activates venv + runs)
+
+─── Testing ───────────────────────────────────────────────
+
+python -m pytest tests/ -v                # Run all tests with verbose output
+python -m pytest tests/ -v --cov          # Run tests with coverage report
+python -m pytest tests/test_autocorrect.py -v       # Test autocorrect module only
+python -m pytest tests/test_prediction.py -v        # Test prediction module only
+python -m pytest tests/test_context_manager.py -v   # Test context manager only
+python -m pytest tests/test_inference.py -v         # Test inference engine only
+python -m pytest tests/test_process_detector.py -v  # Test process detector only
+python -m pytest tests/test_user_model.py -v        # Test user model only
+
+─── Build (C++ Hook — Optional) ──────────────────────────
+
+python scripts/build_hook.py              # Build C++ hook service (needs CMake + MSVC)
+
+─── Package Management ────────────────────────────────────
+
+pip list                                  # Show installed packages
+pip install -r requirements.txt           # Sync dependencies
+pip install -e .                          # Install project in editable/dev mode
+pip install -e ".[all]"                   # Install with all optional deps (cloud, llm, onnx)
+pip install -e ".[cloud]"                 # Install cloud inference deps (anthropic, openai)
+pip install -e ".[ui]"                    # Install UI deps (PySide6, pystray, Pillow)
+
+─── Cloud API Keys (set before launching) ─────────────────
+
+set GROQ_API_KEY=gsk_...                  # Groq Cloud API key (FREE — get at console.groq.com/keys)
+set GEMINI_API_KEY=AIza...                # Google Gemini API key (FREE — get at aistudio.google.com/apikey)
+set OPENAI_API_KEY=sk-...                 # OpenAI GPT-4 API key (paid)
+set ANTHROPIC_API_KEY=sk-ant-...          # Anthropic Claude API key (paid)
+
+─── Git ───────────────────────────────────────────────────
+
+git add .                                 # Stage all changes
+git commit -m "message"                   # Commit with message
+git push origin main                      # Push to remote
+
+─── Hotkeys (while running) ───────────────────────────────
+
+Ctrl+J                                    # Trigger AI code assist
+Ctrl+E                                    # Elaborate / expand text
+Esc                                       # Dismiss overlay
